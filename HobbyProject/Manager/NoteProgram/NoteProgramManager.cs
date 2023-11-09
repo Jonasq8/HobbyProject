@@ -1,43 +1,44 @@
 ﻿using HobbyProject.Utils;
-using HobbyProject.NoteMenu.NoteEditingProgram;
+using HobbyProject.Manager.NoteProgram;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using HobbyProject.Manager.NoteProgram.Interface;
 
-namespace HobbyProject.NoteMenu
+namespace HobbyProject.Manager.NoteProgram
 {
-    internal class NoteProgram
+    internal class NoteProgramManager : INoteProgramManager
     {
-        private string NotePath; 
+        private string NotePath;
 
-        public NoteProgram(string NotePath)
+        public NoteProgramManager(string NotePath)
         {
             this.NotePath = NotePath;
         }
 
-        public void NoteMenu()
+        public void DisplayNoteMenu()
         {
-            Console.Clear();    
+            Console.Clear();
             Console.WriteLine();
             Console.WriteLine("Note Menu: \r\n1. Make a new note?\r\n2. See all notes?\r\n3. Open a note?\r\n4. Delete a note\r\n0. Back");
             Console.Write("Write your anwser: ");
             int anwser = InputHandler.CheckStringForNumber(Console.ReadLine());
-            if( anwser == -1 )
+            if (anwser == -1)
             {
-                NoteMenu();
+                DisplayNoteMenu();
             }
             else
             {
                 Console.WriteLine(anwser);
             }
-            
-            switch( anwser )
+
+            switch (anwser)
             {
                 case 0:
-                    break; 
+                    break;
                 case 1:
                     CreateNewNote();
                     break;
@@ -70,8 +71,9 @@ namespace HobbyProject.NoteMenu
             {
                 Console.WriteLine("Press Y to confirm");
                 string confirmation = Console.ReadLine();
-                if (confirmation.ToLower() == "y") {
-                    
+                if (confirmation.ToLower() == "y")
+                {
+
                     File.Delete(Notes[NoteNumber]);
                     Console.WriteLine("You have succesfully delete af note ");
                 }
@@ -81,7 +83,7 @@ namespace HobbyProject.NoteMenu
                 }
 
                 Console.Clear();
-               
+
             }
 
         }
@@ -92,11 +94,11 @@ namespace HobbyProject.NoteMenu
             {
                 Console.Clear();
 
-                string[] Notes =  GetNotes();
+                string[] Notes = GetNotes();
 
-                int fileNumber = InputHandler.CheckStringForNumber(Console.ReadLine())-1; 
+                int fileNumber = InputHandler.CheckStringForNumber(Console.ReadLine()) - 1;
 
-                if( fileNumber < 0)
+                if (fileNumber < 0)
                 {
                     Console.WriteLine("Please write a number");
                     OpenNote();
@@ -117,18 +119,18 @@ namespace HobbyProject.NoteMenu
                         //Console.WriteLine(line);
                         //Read the next line
                         line = streamReader.ReadLine();
-                       
-                        
+
+
                         lines.Add(line);
 
 
 
                     }
                     streamReader.Close();
-                    NoteEditing noteEditing = new NoteEditing();
+                    NoteEditingManager noteEditing = new NoteEditingManager();
                     noteEditing.EditNote(lines);
                     //close the file
-                    
+
                     Console.WriteLine();
                     Console.WriteLine("Press any key to close file");
                     Console.ReadLine();
@@ -143,10 +145,10 @@ namespace HobbyProject.NoteMenu
                 Console.WriteLine("Exception: " + e.Message);
             }
 
-            
+
         }
 
-       
+
 
         private string[] GetNotes()
         {
@@ -163,7 +165,7 @@ namespace HobbyProject.NoteMenu
                     Console.WriteLine();
                     number++;
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -180,16 +182,17 @@ namespace HobbyProject.NoteMenu
             Console.Write("Write the name of the Note: ");
             string answer = Console.ReadLine();
             string path = @$"{NotePath}{answer}.txt";
-            try {
+            try
+            {
                 using (StreamWriter sw = File.CreateText(path))
-                Console.WriteLine($"You have created a new file:  {answer}, at : {path}");
+                    Console.WriteLine($"You have created a new file:  {answer}, at : {path}");
                 Console.WriteLine();
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
-               Console.WriteLine("Exception: " + e.Message); 
+                Console.WriteLine("Exception: " + e.Message);
             }
-            
+
         }
 
     }

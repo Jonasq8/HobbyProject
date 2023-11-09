@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HobbyProject.Manager.SteamProgram.Interface;
 
 namespace HobbyProject.Manager.SteamProgram
 {
@@ -90,5 +91,9 @@ namespace HobbyProject.Manager.SteamProgram
             return gameFolder;
         }
 
+        public void OpenGameEXE(string[] exes, int anwserexe)
+        {
+            Process.Start(exes[anwserexe - 1]);
+        }
     }
 }

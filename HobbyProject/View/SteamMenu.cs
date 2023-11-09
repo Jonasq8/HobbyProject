@@ -1,5 +1,6 @@
-﻿using HobbyProject.Manager.SteamProgram;
+﻿using HobbyProject.Manager.SteamProgram.Interface;
 using HobbyProject.Utils;
+using HobbyProject.View.Interface;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace HobbyProject.View
 {
-    internal class SteamMenu
+    internal class SteamMenu : ISteamMenu
     {
         private ISteamManager _steamManager;
         public SteamMenu(ISteamManager steamManager)
@@ -25,7 +26,6 @@ namespace HobbyProject.View
 
             switch (answer)
             {
-
                 case 1:
                     _steamManager.OpenSteam();
                     break;
@@ -37,40 +37,40 @@ namespace HobbyProject.View
                     break;
 
             }
-
-
-            
-
-
         }
 
         private void OpenSteamGame()
         {
             List<string> gamesFolder = _steamManager.FindSteamGames();
-            
+
             for (int i = 0; i < gamesFolder.Count; i++)
             {
-                DisplayGameName(gamesFolder[i],i);
+                DisplayGameName(gamesFolder[i], i);
             }
 
             Console.WriteLine("Please Write Number of game to play");
 
             int anwser = InputHandler.CheckStringForNumber(Console.ReadLine());
-
-            var exes = Directory.GetFiles(gamesFolder[anwser - 1], "*.exe");
-
-            for (int i = 0; i < exes.Length; i++)
-            {
-                Console.WriteLine($"{i+1}: {exes[i]}");
-            }
+            string[] exes = WriteGameExes(gamesFolder, anwser);
 
             Console.WriteLine("Please Write Number of game to play");
 
             int anwserexe = InputHandler.CheckStringForNumber(Console.ReadLine());
 
-            Process.Start(exes[anwserexe-1]);
+            _steamManager.OpenGameEXE(exes, anwserexe);
 
+        }
 
+        private static string[] WriteGameExes(List<string> gamesFolder, int anwser)
+        {
+            var exes = Directory.GetFiles(gamesFolder[anwser - 1], "*.exe");
+
+            for (int i = 0; i < exes.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}: {exes[i]}");
+            }
+
+            return exes;
         }
 
         private static void DisplayGameName(string gameFolder, int number)

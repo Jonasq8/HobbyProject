@@ -1,6 +1,8 @@
 ﻿using HobbyProject.Manager.NoteProgram;
 using HobbyProject.Manager.NoteProgram.Interface;
 using HobbyProject.Manager.SteamProgram;
+using HobbyProject.Manager.SteamProgram.Interface;
+using HobbyProject.View.Interface;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,12 +16,13 @@ namespace HobbyProject.View
     internal class MainMenu
     {
         INoteProgramManager _noteProgramManager;
+        
+        ISteamMenu _steamMenu; 
 
-
-        public MainMenu(INoteProgramManager noteProgramManager)
+        public MainMenu(INoteProgramManager noteProgramManager, ISteamMenu steamMenu)
         {
             this._noteProgramManager = noteProgramManager;
-
+            this._steamMenu = steamMenu;
         }
 
         public void OpenMainMenu()
@@ -63,9 +66,9 @@ namespace HobbyProject.View
         }
 
         private void OpenSteamMenu() {
-            SteamManager steamManager = new SteamManager();
-            SteamMenu steamMenu = new SteamMenu(steamManager);
-            steamMenu.DisplaySteamMenu();
+            
+            
+            _steamMenu.DisplaySteamMenu();
         }
 
         

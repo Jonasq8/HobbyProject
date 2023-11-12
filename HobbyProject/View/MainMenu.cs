@@ -27,7 +27,7 @@ namespace HobbyProject.View
                 WriteMainMenu();
                 Console.Write(StaticText.PleaseWriteANumber);
                 int anwser = int.Parse(Console.ReadLine());
-                Console.WriteLine(anwser);
+                
                 switch (anwser)
                 {
                     case 1:

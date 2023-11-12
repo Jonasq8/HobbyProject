@@ -6,7 +6,7 @@ namespace HobbyProject.Manager.NoteProgram
         public void EditNote(List<string> lines)
         {
             bool closed = false;
-            List<char[]> NoteGrid = createGrid(lines);
+            List<char[]> NoteGrid = CreateGrid(lines);
 
             int currentLine = NoteGrid.Count - 1;
             int? lastLine = null;
@@ -29,6 +29,9 @@ namespace HobbyProject.Manager.NoteProgram
                     case ConsoleKey.RightArrow:
                         MoveMarkerRight(ref currentLine, ref lastLine, ref currentCharIndex, ref lastCharIndex, NoteGrid);
                         break;
+                    case ConsoleKey.LeftArrow:
+                        MoveMarkerLeft(ref currentLine, ref lastLine, ref currentCharIndex, ref lastCharIndex, NoteGrid);
+                        break;
                     default:
                         closed = true;
                         break;
@@ -36,7 +39,7 @@ namespace HobbyProject.Manager.NoteProgram
             }
         }
 
-        private List<char[]> createGrid(List<string> lines)
+        private List<char[]> CreateGrid(List<string> lines)
         {
             List<char[]> grid = new List<char[]>();
 
@@ -57,22 +60,41 @@ namespace HobbyProject.Manager.NoteProgram
                 Console.WriteLine(line);
             }
         }
+
+
+        private void MoveMarkerLeft(ref int currentLine, ref int? lastLine, ref int currentChar, ref int? lastChar, List<char[]> inputGrid)
+        {
+            List<char[]> NoteGrid = inputGrid;
+            lastLine = currentLine;
+            lastChar = currentChar;
+            currentChar = currentChar - 1;
+           
+
+            UpdateGridWithCurcer(ref currentLine, lastLine, currentChar, lastChar, NoteGrid);
+
+        }
+
         private void MoveMarkerRight(ref int currentLine, ref int? lastLine, ref int currentChar, ref int? lastChar, List<char[]> inputGrid)
         {
-            
+            List<char[]> NoteGrid = inputGrid;
+            lastLine = currentLine;
+            lastChar = currentChar;
+            currentChar = currentChar + 1;
+
+            UpdateGridWithCurcer(ref currentLine, lastLine, currentChar, lastChar, NoteGrid);
+
         }
+
         private void MoveMarkerDown(ref int currentLine, ref int? lastLine, ref int currentChar, ref int? lastChar, List<char[]> inputGrid)
         {
             List<char[]> NoteGrid = inputGrid;
             lastLine = currentLine;
+            lastChar = currentChar;
             currentLine = currentLine + 1;
             //Console.WriteLine(lines[currentLine-1]);
-            NoteGrid = UpdateGrid(currentLine, currentChar, '|', NoteGrid);
-            if (lastLine != null)
-            {
-                string line = new string(NoteGrid[(int)lastLine]).Replace("|", "");
-                NoteGrid[(int)lastLine] = line.ToCharArray();
-            }
+            NoteGrid = UpdateGridWithCurcer(ref currentLine, lastLine, currentChar, lastChar, NoteGrid);
+
+
 
         }
 
@@ -80,21 +102,56 @@ namespace HobbyProject.Manager.NoteProgram
         {
             List<char[]> NoteGrid = inputGrid;
             lastLine = currentLine;
+            lastChar = currentChar;
             currentLine = currentLine - 1;
             //Console.WriteLine(lines[currentLine-1]);
-            NoteGrid = UpdateGrid(currentLine, currentChar, '|', NoteGrid);
-            if (lastLine != null)
-            { 
-                string line = new string(NoteGrid[(int)lastLine]).Replace("|", "");
-                NoteGrid[(int)lastLine] = line.ToCharArray();
-            }
+            NoteGrid = UpdateGridWithCurcer(ref currentLine, lastLine, currentChar,lastChar, NoteGrid);
         }
 
-        private static List<char[]> UpdateGrid(int LineIndex, int charIndex, char UpdateValue, List<char[]> NoteGrid)
+        private static List<char[]> UpdateGridWithCurcer(ref int currentLine, int? lastLine, int currentChar, int? lastChar, List<char[]> NoteGrid)
         {
-            string line = new string( NoteGrid[LineIndex]);
-            line = line.Insert(charIndex, UpdateValue.ToString());
-            NoteGrid[LineIndex] = line.ToCharArray();
+            if (currentLine < NoteGrid.Count  )
+            {
+                if (currentLine >= 0)
+                {
+
+
+                    if (currentChar > NoteGrid[currentLine].Length)
+                    {
+                        currentChar = NoteGrid[currentLine].Length;
+                    }
+                    if (lastLine != null)
+                    {
+                        if (lastChar + 1 == currentChar || lastChar - 1 == currentChar)
+                        {
+                            string removeWithinLine = new string(NoteGrid[(int)currentLine]).Replace("|", "");
+                            NoteGrid[(int)lastLine] = removeWithinLine.ToCharArray();
+                        }
+                        else
+                        {
+                            string replacestring = new string(NoteGrid[(int)lastLine]).Replace("|", "");
+                            NoteGrid[(int)lastLine] = replacestring.ToCharArray();
+                        }
+
+                    }
+                    string line = new string(NoteGrid[currentLine]);
+                    line = line.Insert(currentChar, "|");
+                    NoteGrid[currentLine] = line.ToCharArray();
+                }else
+                {
+                    currentLine = 0;
+                }
+            }
+            else
+            {
+                
+                currentLine = NoteGrid.Count;
+                
+            }
+                
+            
+
+           
             return NoteGrid;
         }
 

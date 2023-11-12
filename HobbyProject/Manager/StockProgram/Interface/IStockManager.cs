@@ -10,5 +10,6 @@ namespace HobbyProject.Manager.StockProgram.Interface
     internal interface IStockManager
     {
         public Portfolio GetPortfolio();
+        public Task<List<Stock>> SearchStocks(string searchWord);
     }
 }

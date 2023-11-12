@@ -1,14 +1,7 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HobbyProject.NoteMenu.NoteEditingProgram
+namespace HobbyProject.Manager.NoteProgram
 {
-    public class NoteEditing
+    public class NoteEditingManager
     {
         public void EditNote(List<string> lines)
         {

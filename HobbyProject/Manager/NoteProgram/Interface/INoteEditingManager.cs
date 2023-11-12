@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HobbyProject.NoteMenu.NoteEditingProgram
+namespace HobbyProject.Manager.NoteProgram.Interface
 {
-    internal class Line
+    internal interface INoteEditingManager
     {
     }
 }

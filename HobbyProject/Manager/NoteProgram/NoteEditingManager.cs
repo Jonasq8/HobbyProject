@@ -68,7 +68,11 @@ namespace HobbyProject.Manager.NoteProgram
             lastLine = currentLine;
             lastChar = currentChar;
             currentChar = currentChar - 1;
-           
+            if (currentChar < 0)
+            {
+                currentChar++;
+                lastLine--;
+            }
 
             UpdateGridWithCurcer(ref currentLine, lastLine, currentChar, lastChar, NoteGrid);
 
@@ -80,7 +84,15 @@ namespace HobbyProject.Manager.NoteProgram
             lastLine = currentLine;
             lastChar = currentChar;
             currentChar = currentChar + 1;
-
+            if(currentChar > inputGrid[currentLine].Length-1)
+            {
+                currentChar--;
+                currentLine++;
+                if (currentLine > inputGrid.Count - 1)
+                {
+                    inputGrid.Add(new char[0]);
+                }
+            }
             UpdateGridWithCurcer(ref currentLine, lastLine, currentChar, lastChar, NoteGrid);
 
         }
@@ -92,7 +104,13 @@ namespace HobbyProject.Manager.NoteProgram
             lastChar = currentChar;
             currentLine = currentLine + 1;
             //Console.WriteLine(lines[currentLine-1]);
-            NoteGrid = UpdateGridWithCurcer(ref currentLine, lastLine, currentChar, lastChar, NoteGrid);
+            if (currentLine > inputGrid.Count-1)
+            {
+                inputGrid.Add(new char[0]);
+            }
+                NoteGrid = UpdateGridWithCurcer(ref currentLine, lastLine, currentChar, lastChar, NoteGrid);
+            
+            
 
 
 

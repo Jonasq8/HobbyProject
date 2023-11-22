@@ -33,10 +33,28 @@ namespace HobbyProject.Manager.NoteProgram
                         MoveMarkerLeft(ref currentLine, ref lastLine, ref currentCharIndex, ref lastCharIndex, NoteGrid);
                         break;
                     default:
-                        closed = true;
+                        WriteKey(pressedKey, ref currentLine, ref lastLine, ref currentCharIndex, ref lastCharIndex, NoteGrid);
                         break;
                 }
             }
+        }
+
+        private void WriteKey(ConsoleKeyInfo pressedKey, ref int currentLine, ref int? lastLine, ref int currentChar, ref int? lastChar, List<char[]> inputGrid)
+        {
+            Console.WriteLine(pressedKey.Key.ToString());
+            WriteText(pressedKey, ref currentLine, ref lastLine, ref currentChar, ref lastChar, inputGrid);
+
+
+        }
+
+        private static List<char[]> WriteText(ConsoleKeyInfo pressedKey, ref int currentLine, ref int? lastLine, ref int currentChar, ref int? lastChar, List<char[]> NoteGrid)
+        {
+
+            var line = new string( NoteGrid[currentLine]);
+            line = line.Insert(currentChar, pressedKey.Key.ToString());
+            NoteGrid[currentLine] = line.ToCharArray();
+            currentChar++;
+            return NoteGrid;
         }
 
         private List<char[]> CreateGrid(List<string> lines)
